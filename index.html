@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>반응속도 테스트 - 내 반사신경 몇 ms일까? | 무료 온라인 게임</title>
+  <meta name="description" content="반응속도 테스트로 나의 반사신경을 측정해 보세요. 초록색으로 바뀌면 최대한 빨리 클릭! 5회 평균 반응속도(ms)와 재미있는 등급, 상위 백분율을 알려드립니다. 설치 없이 무료로 바로 플레이." />
+  <meta name="keywords" content="반응속도 테스트, 반사신경 테스트, 반응속도 측정, 반응속도 게임, reaction test" />
+  <meta name="theme-color" content="#0f1117" />
+  <meta property="og:title" content="반응속도 테스트 - 내 반사신경 몇 ms일까?" />
+  <meta property="og:description" content="초록색으로 바뀌면 최대한 빨리 탭! 5회 평균 반응속도와 등급을 확인해 보세요." />
+  <meta property="og:type" content="website" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="wrap">
+    <header class="site-header">
+      <h1>⚡ 반응속도 테스트</h1>
+      <p class="subtitle">초록색으로 바뀌면 최대한 빨리 탭하세요!</p>
+      <div class="best-badge" id="bestBadge" hidden>
+        🏆 이번 세션 최고 기록: <strong id="bestValue">—</strong>
+      </div>
+    </header>
+
+    <!-- 게임 무대 -->
+    <div id="stage" class="stage idle" role="button" tabindex="0" aria-label="반응속도 테스트 시작">
+      <div>
+        <div class="stage-emoji" id="stageEmoji">👆</div>
+        <p class="stage-title" id="stageTitle">시작하기</p>
+        <p class="stage-hint" id="stageHint">화면을 탭하면 시작됩니다. 빨간색일 때 기다렸다가 초록색이 되는 순간 탭!</p>
+      </div>
+    </div>
+
+    <!-- 진행 점 -->
+    <div class="progress-dots" id="dots" aria-hidden="true"></div>
+
+    <!-- 결과 카드 -->
+    <div class="result-card" id="resultCard">
+      <div class="tier-emoji" id="tierEmoji">🐆</div>
+      <p class="tier-name"><span class="grad" id="tierName">—</span></p>
+      <p class="result-avg"><span id="avgValue">0</span><small> ms</small></p>
+      <p class="result-percentile" id="percentile">—</p>
+      <div class="attempts-list" id="attemptsList"></div>
+      <div class="btn-row">
+        <button class="btn btn-ghost" id="copyBtn">📋 결과 복사</button>
+        <button class="btn btn-primary" id="retryBtn">🔄 다시 하기</button>
+      </div>
+    </div>
+
+    <!-- 설명 섹션 (SEO) -->
+    <div class="info">
+      <section>
+        <h2>반응속도란 무엇인가요?</h2>
+        <p>반응속도(반응 시간)는 어떤 자극을 인지한 순간부터 몸이 실제로 반응하기까지 걸리는 시간을 말합니다. 이 테스트에서는 화면이 초록색으로 바뀌는 시각 자극을 눈으로 확인하고, 손가락으로 화면을 탭하기까지의 시간을 밀리초(ms) 단위로 측정합니다.</p>
+        <p>반응속도는 눈이 빛을 감지하고, 뇌가 그 정보를 처리해 '지금 눌러야 한다'는 판단을 내리고, 그 신호가 손가락 근육까지 전달되는 일련의 과정을 모두 포함합니다. 그래서 단순히 손이 빠르다고 결과가 좋아지는 것은 아니며, 집중력과 신경 전달 속도가 함께 작용합니다.</p>
+      </section>
+
+      <section>
+        <h2>평균 반응속도는 얼마인가요?</h2>
+        <p>시각 자극에 대한 사람의 평균 반응속도는 대략 200~250ms 정도로 알려져 있습니다. 이 테스트는 인간 평균을 250ms 기준으로 삼아 상위 백분율을 추정합니다. 다만 이 값은 정확한 의학적 측정이 아니라 재미를 위한 참고용 추정치입니다.</p>
+        <p>실제 결과는 사용하는 기기, 화면 주사율, 터치 반응 지연, 그날의 컨디션 등에 따라 수십 ms씩 달라질 수 있습니다. 같은 사람이라도 측정할 때마다 값이 흔들리는 것이 자연스러우므로, 한 번의 결과보다는 여러 번 측정한 평균을 참고하는 편이 좋습니다.</p>
+      </section>
+
+      <section>
+        <h2>반응속도를 높이는 방법</h2>
+        <p>충분한 수면과 휴식은 반응속도에 큰 영향을 줍니다. 피로가 쌓이면 뇌의 정보 처리 속도가 느려져 반응이 눈에 띄게 둔해집니다. 측정 전에 가볍게 몸을 풀고 집중된 상태를 만드는 것만으로도 결과가 조금씩 나아질 수 있습니다.</p>
+        <p>화면에만 집중하고, 초록색이 나타날 위치를 미리 예상해 시선을 두면 판단 시간을 줄일 수 있습니다. 다만 초록색으로 바뀌기 전에 미리 누르는 '찍기'는 무효 처리되니, 예측이 아니라 실제 자극에 반응하는 연습이 중요합니다.</p>
+        <p>반응속도는 반복 연습으로 어느 정도까지는 향상되지만, 개인차와 생물학적 한계가 분명히 존재합니다. 무리하게 기록에 집착하기보다 꾸준히 가볍게 즐기며 자신의 평소 컨디션을 확인하는 도구로 활용해 보세요.</p>
+      </section>
+    </div>
+
+    <footer class="site-footer">
+      <nav>
+        <a href="about.html">소개</a>
+        <a href="privacy.html">개인정보처리방침</a>
+        <a href="contact.html">연락처</a>
+      </nav>
+      <p class="copyright">© 2026 반응속도 테스트. 재미로 즐기는 반사신경 측정 게임입니다.</p>
+    </footer>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+  (function () {
+    "use strict";
+
+    // ===== 설정 =====
+    var TOTAL_ROUNDS = 5;
+    var MIN_WAIT = 2000; // 최소 대기(ms)
+    var MAX_WAIT = 5000; // 최대 대기(ms)
+    var HUMAN_AVG = 250; // 인간 평균 기준(ms)
+
+    // 등급 정의 (낮은 ms일수록 상위 등급)
+    var TIERS = [
+      { max: 180, emoji: "🐆", name: "치타", desc: "번개 같은 반사신경!" },
+      { max: 230, emoji: "🐇", name: "토끼", desc: "아주 빠른 편이에요." },
+      { max: 280, emoji: "🐎", name: "말",   desc: "평균 이상, 준수해요." },
+      { max: 340, emoji: "🐢", name: "거북이", desc: "평균 수준이에요." },
+      { max: Infinity, emoji: "🦥", name: "나무늘보", desc: "느긋한 편이네요." }
+    ];
+
+    // ===== 상태 =====
+    var state = "idle"; // idle | waiting | go | result
+    var round = 0;
+    var results = [];   // 성공한 ms 값들
+    var goTime = 0;
+    var timer = null;
+    var best = null;    // 세션 최고(ms)
+
+    // ===== DOM =====
+    var stage = document.getElementById("stage");
+    var stageEmoji = document.getElementById("stageEmoji");
+    var stageTitle = document.getElementById("stageTitle");
+    var stageHint = document.getElementById("stageHint");
+    var dotsEl = document.getElementById("dots");
+    var resultCard = document.getElementById("resultCard");
+    var tierEmoji = document.getElementById("tierEmoji");
+    var tierName = document.getElementById("tierName");
+    var avgValue = document.getElementById("avgValue");
+    var percentile = document.getElementById("percentile");
+    var attemptsList = document.getElementById("attemptsList");
+    var copyBtn = document.getElementById("copyBtn");
+    var retryBtn = document.getElementById("retryBtn");
+    var bestBadge = document.getElementById("bestBadge");
+    var bestValue = document.getElementById("bestValue");
+    var toast = document.getElementById("toast");
+
+    // ===== 진행 점 초기화 =====
+    function buildDots() {
+      dotsEl.innerHTML = "";
+      for (var i = 0; i < TOTAL_ROUNDS; i++) {
+        var d = document.createElement("span");
+        d.className = "dot";
+        dotsEl.appendChild(d);
+      }
+    }
+    function refreshDots() {
+      var nodes = dotsEl.children;
+      for (var i = 0; i < nodes.length; i++) {
+        nodes[i].className = "dot";
+        if (i < results.length) nodes[i].classList.add("done");
+        else if (i === results.length && state !== "result") nodes[i].classList.add("active");
+      }
+    }
+
+    // ===== 화면 상태 =====
+    function setStage(cls, emoji, title, hint) {
+      stage.className = "stage " + cls;
+      stageEmoji.textContent = emoji;
+      stageTitle.textContent = title;
+      stageHint.innerHTML = hint;
+    }
+
+    function showToast(msg) {
+      toast.textContent = msg;
+      toast.classList.add("show");
+      clearTimeout(toast._t);
+      toast._t = setTimeout(function () { toast.classList.remove("show"); }, 1800);
+    }
+
+    // ===== 게임 흐름 =====
+    function startWaiting() {
+      state = "waiting";
+      resultCard.classList.remove("show");
+      setStage("waiting", "✋", "기다리세요...",
+        "초록색으로 바뀌면 바로 탭! (" + (round + 1) + " / " + TOTAL_ROUNDS + ")");
+      refreshDots();
+      var delay = MIN_WAIT + Math.random() * (MAX_WAIT - MIN_WAIT);
+      timer = setTimeout(function () {
+        state = "go";
+        goTime = Date.now();
+        setStage("go", "⚡", "지금!", "탭하세요!");
+      }, delay);
+    }
+
+    function recordSuccess(ms) {
+      results.push(ms);
+      round++;
+      if (best === null || ms < best) { best = ms; updateBest(); }
+      state = "result-inter";
+      setStage("result", "" + ms, ms + " ms",
+        results.length < TOTAL_ROUNDS
+          ? "좋아요! 탭하면 다음 라운드로 넘어갑니다."
+          : "마지막 라운드! 탭해서 결과를 확인하세요.");
+      // ms를 큰 숫자로 강조
+      stageTitle.innerHTML = '<span class="rt-value">' + ms + '<small> ms</small></span>';
+      stageEmoji.textContent = ms < 200 ? "🔥" : ms < 280 ? "👍" : "🙂";
+      refreshDots();
+    }
+
+    function handleEarly() {
+      // 초록 전환 전에 누름 → 이번 판 무효
+      clearTimeout(timer);
+      state = "early";
+      setStage("early", "🚫", "너무 빨라요!",
+        "초록색이 되기 전에 눌렀어요. 이 판은 무효입니다. 탭해서 다시 시도하세요.");
+      // 무효 표시 점
+      var nodes = dotsEl.children;
+      if (nodes[results.length]) {
+        nodes[results.length].className = "dot void";
+      }
+    }
+
+    function finish() {
+      state = "result";
+      var sum = results.reduce(function (a, b) { return a + b; }, 0);
+      var avg = Math.round(sum / results.length);
+      var tier = pickTier(avg);
+      var pct = estimatePercentile(avg);
+
+      tierEmoji.textContent = tier.emoji;
+      tierName.textContent = tier.name + " 등급";
+      avgValue.textContent = avg;
+      percentile.innerHTML = tier.desc + " 인간 평균(250ms) 기준 <strong>상위 " + pct + "%</strong> 추정";
+
+      attemptsList.innerHTML = "";
+      results.forEach(function (ms, i) {
+        var chip = document.createElement("span");
+        chip.className = "attempt-chip";
+        chip.textContent = (i + 1) + "회 · " + ms + "ms";
+        attemptsList.appendChild(chip);
+      });
+
+      // 복사용 데이터 저장
+      resultCard.dataset.avg = avg;
+      resultCard.dataset.tier = tier.name;
+
+      setStage("idle", "🎉", "완료!", "아래에서 결과를 확인하세요.");
+      resultCard.classList.add("show");
+      refreshDots();
+      resultCard.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+
+    function pickTier(avg) {
+      for (var i = 0; i < TIERS.length; i++) {
+        if (avg <= TIERS[i].max) return TIERS[i];
+      }
+      return TIERS[TIERS.length - 1];
+    }
+
+    // 상위 백분율 추정 (250ms=평균 50%, 표준편차 약 45ms 정규분포 가정)
+    function estimatePercentile(avg) {
+      var sd = 45;
+      var z = (avg - HUMAN_AVG) / sd;
+      var p = normalCdf(z) * 100; // 평균보다 느릴 확률(%)
+      // 빠를수록(작은 ms) 상위 → 상위 % = 나보다 빠른 사람 비율
+      var top = Math.round(p);
+      if (top < 1) top = 1;
+      if (top > 99) top = 99;
+      return top;
+    }
+    function normalCdf(z) {
+      // 표준정규 누적분포 근사(Abramowitz & Stegun)
+      var t = 1 / (1 + 0.2316419 * Math.abs(z));
+      var d = 0.3989423 * Math.exp(-z * z / 2);
+      var prob = d * t * (0.3193815 + t * (-0.3565638 + t * (1.781478 + t * (-1.821256 + t * 1.330274))));
+      return z > 0 ? 1 - prob : prob;
+    }
+
+    function updateBest() {
+      bestBadge.hidden = false;
+      bestValue.textContent = best + " ms";
+    }
+
+    // ===== 클릭/탭 처리 =====
+    function onStageInput(e) {
+      if (e) e.preventDefault();
+      switch (state) {
+        case "idle":
+          round = 0; results = []; buildDots();
+          startWaiting();
+          break;
+        case "waiting":
+          handleEarly();
+          break;
+        case "go":
+          var ms = Date.now() - goTime;
+          recordSuccess(ms);
+          break;
+        case "result-inter":
+          if (results.length >= TOTAL_ROUNDS) finish();
+          else startWaiting();
+          break;
+        case "early":
+          startWaiting();
+          break;
+      }
+    }
+
+    // 터치와 클릭 모두 지원 (중복 방지: touchstart 우선)
+    stage.addEventListener("touchstart", function (e) {
+      onStageInput(e);
+    }, { passive: false });
+    stage.addEventListener("click", function (e) {
+      // 터치 기기에서 click 중복 발생 방지
+      if (e.detail === 0) return; // 키보드 트리거는 keydown에서 처리
+      onStageInput(e);
+    });
+    stage.addEventListener("keydown", function (e) {
+      if (e.key === " " || e.key === "Enter") { onStageInput(e); }
+    });
+    // 터치 후 발생하는 click 무시
+    var lastTouch = 0;
+    stage.addEventListener("touchend", function () { lastTouch = Date.now(); });
+    stage.addEventListener("click", function (e) {
+      if (Date.now() - lastTouch < 600) { e.stopImmediatePropagation(); }
+    }, true);
+
+    // ===== 버튼 =====
+    retryBtn.addEventListener("click", function () {
+      resultCard.classList.remove("show");
+      state = "idle"; round = 0; results = [];
+      buildDots();
+      setStage("idle", "👆", "다시 시작하기",
+        "화면을 탭하면 시작됩니다. 빨간색일 때 기다렸다가 초록색이 되는 순간 탭!");
+      stage.scrollIntoView({ behavior: "smooth", block: "center" });
+    });
+
+    copyBtn.addEventListener("click", function () {
+      var avg = resultCard.dataset.avg;
+      var tier = resultCard.dataset.tier;
+      // 현재 열려 있는 페이지 주소를 자동으로 사용 (하드코딩 없음, 배포 시 실제 도메인 자동 반영)
+      var siteUrl = location.href.split(/[?#]/)[0];
+      var text = "내 반응속도 " + avg + "ms, " + tier + " 등급! 너도 해봐 → 반응속도 테스트\n" + siteUrl;
+      copyText(text).then(function () {
+        copyBtn.classList.add("copied");
+        copyBtn.textContent = "✅ 복사됨!";
+        showToast("결과가 클립보드에 복사되었어요!");
+        setTimeout(function () {
+          copyBtn.classList.remove("copied");
+          copyBtn.textContent = "📋 결과 복사";
+        }, 1600);
+      }).catch(function () {
+        showToast("복사에 실패했어요. 직접 복사해 주세요.");
+      });
+    });
+
+    function copyText(text) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        return navigator.clipboard.writeText(text);
+      }
+      // 폴백 (file:// 및 구형 브라우저)
+      return new Promise(function (resolve, reject) {
+        try {
+          var ta = document.createElement("textarea");
+          ta.value = text;
+          ta.style.position = "fixed";
+          ta.style.opacity = "0";
+          document.body.appendChild(ta);
+          ta.select();
+          var ok = document.execCommand("copy");
+          document.body.removeChild(ta);
+          ok ? resolve() : reject();
+        } catch (err) { reject(err); }
+      });
+    }
+
+    // ===== 초기화 =====
+    buildDots();
+  })();
+  </script>
+</body>
+</html>
