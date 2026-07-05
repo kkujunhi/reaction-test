@@ -23,7 +23,7 @@
 
   <div class="wrap">
     <header class="site-header">
-      <h1>⚡ 반응속도 테스트</h1>
+      <h1 id="siteTitle">⚡ 반응속도 테스트</h1>
       <p class="subtitle" id="subtitle">초록색으로 바뀌면 최대한 빨리 탭하세요!</p>
       <div class="best-badge" id="bestBadge" hidden>
         <span id="bestLabel">🏆 이번 세션 최고 기록:</span> <strong id="bestValue">—</strong>
@@ -64,7 +64,7 @@
         <a href="privacy.html">개인정보처리방침</a>
         <a href="contact.html">연락처</a>
       </nav>
-      <p class="copyright">© 2026 반응속도 테스트. 재미로 즐기는 반사신경 측정 게임입니다.</p>
+      <p class="copyright" id="copyright">© 2026 반응속도 테스트. 재미로 즐기는 반사신경 측정 게임입니다.</p>
     </footer>
   </div>
 
@@ -98,7 +98,9 @@
       ko: {
         htmlLang: "ko",
         stageAria: "반응속도 테스트 시작",
+        title: "⚡ 반응속도 테스트",
         subtitle: "초록색으로 바뀌면 최대한 빨리 탭하세요!",
+        copyright: "© 2026 반응속도 테스트. 재미로 즐기는 반사신경 측정 게임입니다.",
         bestLabel: "🏆 이번 세션 최고 기록:",
         stage: {
           idleTitle: "시작하기",
@@ -165,7 +167,9 @@
       en: {
         htmlLang: "en",
         stageAria: "Start reaction test",
+        title: "⚡ Reaction Time Test",
         subtitle: "Tap as fast as you can when it turns green!",
+        copyright: "© 2026 Reaction Time Test. A fun game to measure your reflexes.",
         bestLabel: "🏆 Best this session:",
         stage: {
           idleTitle: "Start",
@@ -257,7 +261,9 @@
 
     // ===== DOM =====
     var langSwitch = document.getElementById("langSwitch");
+    var siteTitleEl = document.getElementById("siteTitle");
     var subtitleEl = document.getElementById("subtitle");
+    var copyrightEl = document.getElementById("copyright");
     var bestBadge = document.getElementById("bestBadge");
     var bestLabel = document.getElementById("bestLabel");
     var bestValue = document.getElementById("bestValue");
@@ -531,7 +537,9 @@
 
       document.documentElement.lang = L.htmlLang;
       stage.setAttribute("aria-label", L.stageAria);
+      siteTitleEl.textContent = L.title;
       subtitleEl.textContent = L.subtitle;
+      copyrightEl.textContent = L.copyright;
       bestLabel.textContent = L.bestLabel;
       copyBtn.textContent = L.copyBtn;
       retryBtn.textContent = L.retryBtn;
